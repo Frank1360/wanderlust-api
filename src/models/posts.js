@@ -26,12 +26,12 @@ const PostsSchema = new Schema(
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
     },
   },
   { timestamps: true }
 );
 
-const User = model("User", UserSchema);
+const Posts = model("Posts", PostsSchema);
 
-module.exports = User;
+module.exports = Posts;
