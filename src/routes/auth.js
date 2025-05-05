@@ -20,7 +20,7 @@ router.post(
     }),
     check("firstName", "El nombre es obligatorio.").notEmpty(),
     check("lastName", "El apellido es obligatorio.").notEmpty(),
-    check("bio", "La fecha de cumpleaños es obligatoria.").notEmpty(),
+    check("birthday", "La fecha de cumpleaños es obligatoria.").notEmpty(),
     check("phone", "El número de telefono es obligatorio.").notEmpty(),
     check("phone", "El número de telefono debe contener 11 digitos.").isLength({
       min: 11,

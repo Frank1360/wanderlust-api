@@ -28,6 +28,9 @@ const UserSchema = new Schema(
     bio: {
       type: String,
     },
+    birthday: {
+      type: String,
+    },
     interests: [
       {
         interest: {

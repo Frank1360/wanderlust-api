@@ -10,7 +10,8 @@ class Server {
 
     this.path = {
       auth: "/api/auth",
-      user: "/api/user"
+      post: "/api/post",
+      user: "/api/user",
     };
 
     this.connectionDB();
@@ -20,7 +21,7 @@ class Server {
     this.routes();
   }
 
-  async connectionDB(){
+  async connectionDB() {
     await connection();
   }
 
@@ -39,15 +40,16 @@ class Server {
     );
   }
 
-  routes(){
+  routes() {
     this.app.use(this.path.auth, require("../src/routes/auth"));
+    this.app.use(this.path.post, require("../src/routes/posts"));
     this.app.use(this.path.user, require("../src/routes/user"));
   }
 
-  listen(){
+  listen() {
     this.app.listen(this.port, () => {
-        console.log(`Servidor corriendo en puerto: ${this.port}`)
-    })
+      console.log(`Servidor corriendo en puerto: ${this.port}`);
+    });
   }
 }
 

@@ -2,7 +2,6 @@ const { response, request } = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
-
 const jwtValidation = async (req = request, res = response, next) => {
   token = req.header("wanderlust_token");
 
@@ -29,3 +28,5 @@ const jwtValidation = async (req = request, res = response, next) => {
     });
   }
 };
+
+module.exports = jwtValidation;

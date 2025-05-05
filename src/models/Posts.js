@@ -1,17 +1,13 @@
 const { Schema, model, Types } = require("mongoose");
 
-const PostsSchema = new Schema(
+const PostSchema = new Schema(
   {
     description: {
       type: String,
     },
-    tags: [
-      {
-        tag: {
-          type: String,
-        },
-      },
-    ],
+    tags: {
+      type: Array,
+    },
     location: {
       latitude: { type: String, default: null },
       longitude: { type: String, default: null },
@@ -32,6 +28,6 @@ const PostsSchema = new Schema(
   { timestamps: true }
 );
 
-const Posts = model("Posts", PostsSchema);
+const Post = model("Post", PostSchema);
 
-module.exports = Posts;
+module.exports = Post;

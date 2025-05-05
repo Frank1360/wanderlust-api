@@ -1,6 +1,6 @@
 const { Schema, model, Types } = require("mongoose");
 
-const CommentsSchema = new Schema(
+const MediaSchema = new Schema(
   {
     type: {
       type: String,
@@ -25,6 +25,6 @@ const CommentsSchema = new Schema(
   { timestamps: true }
 );
 
-const Comments = model("Comments", CommentsSchema);
+const Media = model("Media", MediaSchema);
 
-module.exports = Comments;
+module.exports = Media;

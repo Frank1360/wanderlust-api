@@ -3,7 +3,7 @@ const bcryptjs = require("bcryptjs");
 const User = require("../models/user");
 
 const namePatch = async (req = request, res = response) => {
-  const { _id } = req.query;
+  const { _id } = req.user;
   const { firstName, lastName } = req.body;
 
   try {
@@ -29,7 +29,7 @@ const namePatch = async (req = request, res = response) => {
 };
 
 const emailPatch = async (req = request, res = response) => {
-  const { _id } = req.query;
+  const { _id } = req.user;
   const { email } = req.body;
 
   try {
@@ -52,7 +52,7 @@ const emailPatch = async (req = request, res = response) => {
 };
 
 const passwordPatch = async (req = request, res = response) => {
-  const { _id } = req.query;
+  const { _id } = req.user;
   const { password } = req.body;
 
   const salt = bcryptjs.genSaltSync();
@@ -78,7 +78,7 @@ const passwordPatch = async (req = request, res = response) => {
 };
 
 const phonePatch = async (req = request, res = response) => {
-  const { _id } = req.query;
+  const { _id } = req.user;
   const { phone } = req.body;
 
   try {

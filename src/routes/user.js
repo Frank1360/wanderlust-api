@@ -2,6 +2,7 @@ const { Router } = require("express");
 const fieldsValidator = require("../middlewares/fields");
 const { emailPatch, passwordPatch, namePatch, phonePatch } = require("../controllers/user");
 const { check } = require("express-validator");
+const jwtValidation = require("../middlewares/jwt_validation");
 
 const router = Router();
 
@@ -10,6 +11,7 @@ router.patch(
   [
     check("firstName", "El nombre es obligatorio.").notEmpty(),
     check("lastName", "El apellido es obligatorio.").notEmpty(),
+    jwtValidation,
     fieldsValidator,
   ],
   namePatch
@@ -20,6 +22,7 @@ router.patch(
   [
     check("email", "El correo es obligatorio.").notEmpty(),
     check("email", "El formato del correo no es correcto.").isEmail(),
+    jwtValidation,
     fieldsValidator,
   ],
   emailPatch
@@ -36,6 +39,7 @@ router.patch(
       min: 8,
       max: 16,
     }),
+    jwtValidation,
     fieldsValidator,
   ],
   passwordPatch
@@ -49,6 +53,7 @@ router.patch(
       min: 11,
       max: 11,
     }),
+    jwtValidation,
     fieldsValidator,
   ],
   phonePatch
