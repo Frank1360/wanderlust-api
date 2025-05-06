@@ -10,6 +10,8 @@ class Server {
 
     this.path = {
       auth: "/api/auth",
+      comment: "/api/comment",
+      favorite: "/api/favorite",
       follow: "/api/follow",
       post: "/api/post",
       user: "/api/user",
@@ -43,7 +45,9 @@ class Server {
 
   routes() {
     this.app.use(this.path.auth, require("../src/routes/auth"));
+    this.app.use(this.path.comment, require("../src/routes/comments"));
     this.app.use(this.path.follow, require("../src/routes/follower"));
+    this.app.use(this.path.favorite, require("../src/routes/favorites"));
     this.app.use(this.path.post, require("../src/routes/posts"));
     this.app.use(this.path.user, require("../src/routes/user"));
   }

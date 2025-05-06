@@ -73,10 +73,10 @@ const followersGet = async (req = request, res = response) => {
 };
 
 const followingsGetByUser = async (req = request, res = response) => {
-  const { _id } = req.query;
+  const { userId } = req.query;
 
   try {
-    const followings = await Followers.find({ followerId: _id });
+    const followings = await Followers.find({ followingId: userId });
 
     res.status(200).json({
       followings,
@@ -90,13 +90,13 @@ const followingsGetByUser = async (req = request, res = response) => {
 };
 
 const followersGetByUser = async (req = request, res = response) => {
-  const { _id } = req.query;
+  const { userId } = req.query;
 
   try {
-    const followers = await Followers.find({ followingId: _id });
+    const followers = await Followers.find({ followerId: userId });
 
     res.status(200).json({
-        followers,
+      followers,
     });
   } catch (error) {
     console.error(error);
@@ -110,6 +110,6 @@ module.exports = {
   followPost,
   followingsGet,
   followersGet,
-  followingsGetByUser,
   followersGetByUser,
+  followingsGetByUser,
 };

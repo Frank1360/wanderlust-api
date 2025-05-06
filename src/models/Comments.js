@@ -8,10 +8,12 @@ const CommentsSchema = new Schema(
     },
     postId: {
       type: Schema.Types.ObjectId,
+      required: [true, 'PostId obligatorio.'],
       ref: "Posts",
     },
     userId: {
       type: Schema.Types.ObjectId,
+      required: [true, 'UserId obligatorio.'],
       ref: "User",
     },
   },
