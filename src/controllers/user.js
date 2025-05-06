@@ -2,6 +2,23 @@ const { request, response } = require("express");
 const bcryptjs = require("bcryptjs");
 const User = require("../models/user");
 
+const userGet = async (req = request, res = response) => {
+    const {_id} = req.query
+
+    try{
+        const user = await User.findById(_id);
+
+        res.status(200).json({
+            user
+        })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          msg: "Error, por favor intente en unos minutos.",
+        });
+      }
+}
+
 const namePatch = async (req = request, res = response) => {
   const { _id } = req.user;
   const { firstName, lastName } = req.body;
@@ -100,4 +117,4 @@ const phonePatch = async (req = request, res = response) => {
   }
 };
 
-module.exports = { namePatch, emailPatch, passwordPatch, phonePatch };
+module.exports = { userGet, namePatch, emailPatch, passwordPatch, phonePatch };

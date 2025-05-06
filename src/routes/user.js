@@ -1,10 +1,12 @@
 const { Router } = require("express");
 const fieldsValidator = require("../middlewares/fields");
-const { emailPatch, passwordPatch, namePatch, phonePatch } = require("../controllers/user");
+const { emailPatch, passwordPatch, namePatch, phonePatch, userGet } = require("../controllers/user");
 const { check } = require("express-validator");
 const jwtValidation = require("../middlewares/jwt_validation");
 
 const router = Router();
+
+router.get('/user', [jwtValidation], userGet)
 
 router.patch(
   "/name",

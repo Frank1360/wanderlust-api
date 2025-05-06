@@ -94,9 +94,35 @@ const postsPost = async (req = request, res = response) => {
 };
 
 const postsGetUser = async (req = request, res = response) => {
-    
+  const user = req.user;
+
+  try {
+    const posts = await Post.find({userId: user._id});
+
+    res.status(200).json({posts})
+  } catch {
+    console.error(error);
+
+    res.status(500).json({
+      msg: "Error, por favor intente en unos minutos.",
+    });
+  }
 };
 
-const postsGet = async (req = request, res = response) => {};
+const postsGet = async (req = request, res = response) => {
+    const user = req.user;
+
+  try {
+    const posts = await Post.find();
+
+    res.status(200).json({posts})
+  } catch {
+    console.error(error);
+
+    res.status(500).json({
+      msg: "Error, por favor intente en unos minutos.",
+    });
+  }
+};
 
 module.exports = { postsPost, postsGetUser, postsGet };
