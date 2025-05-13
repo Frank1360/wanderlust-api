@@ -4,15 +4,17 @@ const User = require("../models/user");
 const { jwtGeneration } = require("../utils/jwt_generation");
 
 const register = async (req = request, res = response) => {
-  const { email, password, firstName, lastName, bio, phone } = req.body;
+  const { email, password, firstName, lastName, birthday, bio, phone, username } = req.body;
 
   const user = new User({
     email: email.toUpperCase(),
     password,
     firstName: firstName.toUpperCase(),
     lastName: lastName.toUpperCase(),
+    birthday,
     bio,
     phone,
+    username,
   });
 
   const salt = bcryptjs.genSaltSync();
@@ -22,16 +24,29 @@ const register = async (req = request, res = response) => {
     await user.save();
 
     res.status(200).json({
-      msg: `El usuario ${firstName} ${lastName} fue creado con exito.`,
+      msg: `El usuario ${firstName} ${lastName} fue creado con éxito.`,
     });
+
   } catch (error) {
-    console.error(error);
+    // 🔍 Validación de campos únicos repetidos (email, username)
+    if (error.code === 11000) {
+      const duplicatedField = Object.keys(error.keyValue)[0];
+
+      let message = "Ya existe un usuario con ese dato.";
+      if (duplicatedField === "email") message = "El correo ya está registrado.";
+      if (duplicatedField === "username") message = "El nombre de usuario ya está en uso.";
+
+      return res.status(400).json({ msg: message });
+    }
+
+    console.error("Error en registro:", error);
     res.status(500).json({
       msg: "Error, por favor intente en unos minutos.",
     });
   }
 };
 
+// -------------------- LOGIN --------------------
 const login = async (req = request, res = response) => {
   const { email, password } = req.body;
 
@@ -40,7 +55,7 @@ const login = async (req = request, res = response) => {
 
     if (!user) {
       return res.status(400).json({
-        msg: "Credenciales incorrectas. - PRUEBA: usuario no existe.",
+        msg: "Credenciales incorrectas. Usuario no existe.",
       });
     }
 
@@ -48,7 +63,7 @@ const login = async (req = request, res = response) => {
 
     if (!validatePassword) {
       return res.status(400).json({
-        msg: "Credenciales incorrectas. - PRUEBA: contraseña incorrecta.",
+        msg: "Credenciales incorrectas. Contraseña inválida.",
       });
     }
 
@@ -64,8 +79,9 @@ const login = async (req = request, res = response) => {
         email: user.email,
       },
     });
+
   } catch (error) {
-    console.error(error);
+    console.error("Error en login:", error);
     res.status(500).json({
       msg: "Error, por favor intente en unos minutos.",
     });

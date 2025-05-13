@@ -1,6 +1,6 @@
-const { Schema, model, Types } = require("mongoose");
+const { Schema, model, models } = require("mongoose");
 
-const CommentsSchema = new Schema(
+const MediaSchema = new Schema(
   {
     type: {
       type: String,
@@ -12,7 +12,7 @@ const CommentsSchema = new Schema(
     },
     thumbnail: {
       type: String,
-      required: "Vista previa requerida.",
+      required: [true, "Vista previa requerida."],
     },
     description: {
       type: String,
@@ -25,6 +25,6 @@ const CommentsSchema = new Schema(
   { timestamps: true }
 );
 
-const Comments = model("Comments", CommentsSchema);
+const Media = models.Media || model("Media", MediaSchema);
 
-module.exports = Comments;
+module.exports = Media;
