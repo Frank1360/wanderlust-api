@@ -1,5 +1,5 @@
 const { request, response } = require("express");
-const Post = require("../models/posts");
+const Post = require("../models/posts");//cambio  
 const Media = require("../models/media");
 const cloudinary = require("../utils/cloudinary");
 
