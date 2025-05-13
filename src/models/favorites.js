@@ -13,7 +13,7 @@ const FavoritesSchema = new Schema(
   },
   { timestamps: true }
 );
-
+//cambio
 const Favorites = model("Favorites", FavoritesSchema);
 
 module.exports = Favorites;

@@ -17,7 +17,7 @@ const CommentsSchema = new Schema(
   },
   { timestamps: true }
 );
-
+//cambio
 const Comments = model("Comments", CommentsSchema);
 
 module.exports = Comments;
