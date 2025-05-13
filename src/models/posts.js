@@ -9,29 +9,35 @@ const PostsSchema = new Schema(
       {
         tag: {
           type: String,
+          required: true,
+          trim: true,
         },
       },
     ],
     location: {
       latitude: { type: String, default: null },
       longitude: { type: String, default: null },
-      description: { type: String, default: null },
+      description: { type: String, default: null, uppercase: true },
     },
-    likes: {
-      user: {
-        _id: Types.ObjectId,
-        name: String,
-        last_name: String,
+     likes: [
+      {
+        user: {
+          _id: { type: Types.ObjectId, ref: "User", required: true },
+          name: String,
+          last_name: String,
+        },
       },
-    },
+    ],
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    versionKey: false,
+  }
 );
 
-const Posts = model("Posts", PostsSchema);
-
-module.exports = Posts;
+module.exports = model("Post", PostsSchema); 

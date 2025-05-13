@@ -23,11 +23,15 @@ const postsPost = async (req = request, res = response) => {
     locationLongitude,
   } = req.body;
 
-  const post = new Post({
-    userId: user._id,
-    description,
-    tags: tags.split(","),
-  });
+ const parsedTags = typeof tags === "string"
+  ? tags.split(",").map((tag) => ({ tag: tag.trim() }))
+  : [];
+
+const post = new Post({
+  userId: user._id,
+  description,
+  tags: parsedTags,
+});
 
   if (locationLatitude) {
     post.location.latitude = locationLatitude;
@@ -97,7 +101,7 @@ const postsGetUser = async (req = request, res = response) => {
   const user = req.user;
 
   try {
-    const posts = await Post.find({userId: user._id});
+    const posts = await Post.find({ userId: user._id }).populate("userId", "username");
 
     res.status(200).json({posts})
   } catch {
@@ -110,18 +114,15 @@ const postsGetUser = async (req = request, res = response) => {
 };
 
 const postsGet = async (req = request, res = response) => {
-    const user = req.user;
-
   try {
-    const posts = await Post.find();
+    const posts = await Post.find()
+      .populate("userId", "username")
+      .sort({ createdAt: -1 });
 
-    res.status(200).json({posts})
-  } catch {
+    res.status(200).json({ posts });
+  } catch (error) {
     console.error(error);
-
-    res.status(500).json({
-      msg: "Error, por favor intente en unos minutos.",
-    });
+    res.status(500).json({ msg: "Error al obtener publicaciones." });
   }
 };
 
