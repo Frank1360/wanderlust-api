@@ -55,7 +55,7 @@ const login = async (req = request, res = response) => {
 
     if (!user) {
       return res.status(400).json({
-        msg: "Credenciales incorrectas. Usuario no existe.",
+        msg: "Credenciales incorrectas.",
       });
     }
 
@@ -63,7 +63,7 @@ const login = async (req = request, res = response) => {
 
     if (!validatePassword) {
       return res.status(400).json({
-        msg: "Credenciales incorrectas. Contraseña inválida.",
+        msg: "Credenciales incorrectas.",
       });
     }
 

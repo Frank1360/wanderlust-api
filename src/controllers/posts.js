@@ -16,6 +16,7 @@ const postsPost = async (req = request, res = response) => {
   }
 
   const {
+    title,
     description,
     tags,
     locationDescription,
@@ -29,6 +30,7 @@ const postsPost = async (req = request, res = response) => {
 
 const post = new Post({
   userId: user._id,
+  title,
   description,
   tags: parsedTags,
 });
@@ -85,7 +87,7 @@ const post = new Post({
       }
     }
 
-    res.status(400).json({
+    res.status(200).json({
       msg: "El post se ha creado correctamente.",
     });
   } catch (error) {
@@ -119,7 +121,25 @@ const postsGet = async (req = request, res = response) => {
       .populate("userId", "username")
       .sort({ createdAt: -1 });
 
-    res.status(200).json({ posts });
+      const media = await Media.find();
+
+      const newPosts = [];
+
+      posts.forEach((post) => {
+
+        const newPost = {};
+
+        newPost.post = post;
+
+        const medias = media.find((media) => post._id.toString().split("'")[0] == media.postId.toString().split("'")[0])
+
+
+        newPost.media = medias;
+
+        newPosts.push(newPost);
+      })
+
+    res.status(200).json({ 'posts': newPosts });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error al obtener publicaciones." });

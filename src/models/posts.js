@@ -2,6 +2,9 @@ const { Schema, model, Types } = require("mongoose");
 
 const PostsSchema = new Schema(
   {
+    title: {
+      type: String,
+    },
     description: {
       type: String,
     },

@@ -3,7 +3,9 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const jwtValidation = async (req = request, res = response, next) => {
-  token = req.header("wanderlust_token");
+  const token = req.header("wanderlust_token");
+
+  console.log(token)
 
   if (!token) {
     return res.status(401).json({ msg: "La petición no posee token." });

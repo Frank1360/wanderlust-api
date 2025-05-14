@@ -20,4 +20,4 @@ const CommentsSchema = new Schema(
 //cambio
 const Comments = model("Comments", CommentsSchema);
 
-module.exports = Comments;
+module.exports = Comments; 
