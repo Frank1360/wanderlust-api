@@ -3,21 +3,25 @@ const bcryptjs = require("bcryptjs");
 const User = require("../models/user");
 
 const userGet = async (req = request, res = response) => {
-    const {_id} = req.query
+  const { _id } = req.query;
 
-    try{
-        const user = await User.findById(_id);
+  if (!_id) {
+    return res.status(400).json({ msg: "Se requiere el ID del usuario." });
+  }
 
-        res.status(200).json({
-            user
-        })
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-          msg: "Error, por favor intente en unos minutos.",
-        });
-      }
-}
+  try {
+    const user = await User.findById(_id);
+
+    res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      msg: "Error, por favor intente en unos minutos.",
+    });
+  }
+};
 
 const namePatch = async (req = request, res = response) => {
   const { _id } = req.user;
