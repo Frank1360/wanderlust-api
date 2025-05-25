@@ -6,6 +6,11 @@ const { jwtGeneration } = require("../utils/jwt_generation");
 const register = async (req = request, res = response) => {
   const { email, password, firstName, lastName, birthday, bio, phone, username } = req.body;
 
+  // Validación de campos obligatorios
+  if (!username) {
+    return res.status(400).json({ msg: "El nombre de usuario es obligatorio." });
+  }
+
   const user = new User({
     email: email.toUpperCase(),
     password,

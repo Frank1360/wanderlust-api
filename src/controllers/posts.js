@@ -120,30 +120,24 @@ const postsGet = async (req = request, res = response) => {
     const posts = await Post.find()
       .populate("userId", "username")
       .sort({ createdAt: -1 });
+    console.log("✅ Posts encontrados:", posts.length);
+    const media = await Media.find();
 
-      const media = await Media.find();
+    const newPosts = posts.map((post) => {
+      const postMedia = media.filter(
+        (m) => post._id.toString() === m.postId.toString()
+      );
 
-      const newPosts = [];
+      return {
+        post,
+        media: postMedia,
+      };
+    });
 
-      posts.forEach((post) => {
-
-        const newPost = {};
-
-        newPost.post = post;
-
-        const medias = media.find((media) => post._id.toString().split("'")[0] == media.postId.toString().split("'")[0])
-
-
-        newPost.media = medias;
-
-        newPosts.push(newPost);
-      })
-
-    res.status(200).json({ 'posts': newPosts });
+    res.status(200).json({ posts: newPosts });
   } catch (error) {
-    console.error(error);
+    console.error("❌ Error en postsGet:", error);
     res.status(500).json({ msg: "Error al obtener publicaciones." });
   }
 };
-
 module.exports = { postsPost, postsGetUser, postsGet };
