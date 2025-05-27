@@ -15,6 +15,7 @@ class Server {
       follow: "/api/follow",
       post: "/api/post",
       user: "/api/user",
+      search: "/api/search",
     };
 
     this.connectionDB();
@@ -50,6 +51,7 @@ class Server {
     this.app.use(this.path.favorite, require("../src/routes/favorites"));
     this.app.use(this.path.post, require("../src/routes/posts"));
     this.app.use(this.path.user, require("../src/routes/user"));
+    this.app.use(this.path.search, require("../src/routes/search"));
   }
 
   listen() {
