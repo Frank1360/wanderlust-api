@@ -141,39 +141,3 @@ const postsGet = async (req = request, res = response) => {
   }
 };
 module.exports = { postsPost, postsGetUser, postsGet };
-
-const postsGetByUserId = async (req = request, res = response) => {
-  const { userId } = req.query;
-
-  if (!userId) {
-    return res.status(400).json({
-      msg: "Falta el parámetro userId.",
-    });
-  }
-
-  try {
-    const posts = await Post.find({ userId })
-      .populate("userId", "username profilePicture")
-      .sort({ createdAt: -1 });
-
-    const media = await Media.find();
-
-    const newPosts = posts.map((post) => {
-      const postMedia = media.filter(
-        (m) => post._id.toString() === m.postId.toString()
-      );
-
-      return {
-        post,
-        media: postMedia,
-      };
-    });
-
-    res.status(200).json({ posts: newPosts });
-  } catch (error) {
-    console.error("❌ Error al obtener posts del usuario:", error);
-    res.status(500).json({
-      msg: "Error interno al obtener publicaciones.",
-    });
-  }
-};
