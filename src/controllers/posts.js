@@ -115,6 +115,22 @@ const postsGetUser = async (req = request, res = response) => {
   }
 };
 
+const postsGetByUser = async (req = request, res = response) => {
+  const { userId } = req.query;
+
+  try {
+    const posts = await Post.find({ userId: userId }).populate("userId", "username");
+
+    res.status(200).json({posts})
+  } catch {
+    console.error(error);
+
+    res.status(500).json({
+      msg: "Error, por favor intente en unos minutos.",
+    });
+  }
+};
+
 const postsGet = async (req = request, res = response) => {
   try {
     const posts = await Post.find()
@@ -140,4 +156,4 @@ const postsGet = async (req = request, res = response) => {
     res.status(500).json({ msg: "Error al obtener publicaciones." });
   }
 };
-module.exports = { postsPost, postsGetUser, postsGet };
+module.exports = { postsPost, postsGetUser, postsGetByUser, postsGet };
