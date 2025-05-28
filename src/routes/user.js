@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const fieldsValidator = require("../middlewares/fields");
-const { emailPatch, passwordPatch, namePatch, phonePatch, userGet } = require("../controllers/user");
+const { emailPatch, passwordPatch, namePatch, phonePatch, userGet, profilePicturePost } = require("../controllers/user");
 const { check } = require("express-validator");
 const jwtValidation = require("../middlewares/jwt_validation");
 
@@ -59,6 +59,14 @@ router.patch(
     fieldsValidator,
   ],
   phonePatch
+);
+
+router.post(
+  "/profilePicture",
+  [
+    jwtValidation,
+  ],
+  profilePicturePost
 );
 
 module.exports = router;

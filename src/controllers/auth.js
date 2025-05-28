@@ -2,6 +2,7 @@ const { request, response } = require("express");
 const bcryptjs = require("bcryptjs");
 const User = require("../models/user");
 const { jwtGeneration } = require("../utils/jwt_generation");
+const nodemailer = require("nodemailer");
 
 const register = async (req = request, res = response) => {
   const { email, password, firstName, lastName, birthday, bio, phone, username } = req.body;
@@ -93,4 +94,51 @@ const login = async (req = request, res = response) => {
   }
 };
 
-module.exports = { register, login };
+const restorePassword = async (req = request, res = response) => {
+  const { email } = req.body
+
+  let ramdonNumber = Math.floor(Math.random() * 900000000) + 100000000;
+
+  try {
+    const user = await User.findOne({ email: email.toUpperCase() });
+
+    if (!user) {
+      return res.status(400).json({
+        msg: 'El correo no pudo ser enviado, intente mas tarde!',
+      });
+    }
+
+    const salt = bcryptjs.genSaltSync();
+    const temporalPassword = bcryptjs.hashSync(ramdonNumber.toString(), salt);
+    await User.findByIdAndUpdate(user._id, { password: temporalPassword })
+
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_KEY
+      }
+    });
+
+    let mailOptions = {
+      from: process.env.MAILUSER,
+      to: email,
+      subject: 'Recuperación de contraseña WanderlustAPP.',
+      text: 'Tu contraseña temporal es: ' + ramdonNumber
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        res.status(400).json({ ok: false, msg: 'El correo no pudo ser enviado, intente mas tarde!' })
+      } else {
+        res.status(200).json({ ok: true, msg: 'Correo enviado satisfactoriamente!' })
+      }
+    });
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      msg: "Error, intente mas tarde!",
+    });
+  }
+}
+
+module.exports = { register, login, restorePassword };

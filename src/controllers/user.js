@@ -1,6 +1,7 @@
 const { request, response } = require("express");
 const bcryptjs = require("bcryptjs");
 const User = require("../models/user");
+const cloudinary = require("../utils/cloudinary");
 
 const userGet = async (req = request, res = response) => {
   const { _id } = req.query;
@@ -121,4 +122,35 @@ const phonePatch = async (req = request, res = response) => {
   }
 };
 
-module.exports = { userGet, namePatch, emailPatch, passwordPatch, phonePatch };
+const profilePicturePost = async (req = request, res = response) => {
+  const { _id } = req.user;
+
+  if(!req.files) {
+    return res.status(400).json({
+      msg: "La imagen es obligatoria.",
+    });
+  }
+
+  const { tempFilePath } = req.files.profilePicture;
+
+  try {
+    const { url } = await cloudinary.uploader.upload(
+      tempFilePath
+    );
+
+    await User.findByIdAndUpdate(_id, {
+      profilePicture: url,
+    });
+
+    res.status(200).json({
+      msg: "La foto de perfil fue actualizada con exito.",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "Error, por favor intente en unos minutos..",
+    });
+  }
+};
+
+module.exports = { userGet, namePatch, emailPatch, passwordPatch, phonePatch, profilePicturePost };
