@@ -117,14 +117,26 @@ const postsGetUser = async (req = request, res = response) => {
 
 const postsGetByUser = async (req = request, res = response) => {
   const { userId } = req.query;
+  console.log("🟡 userId recibido:", userId);
 
   try {
-    const posts = await Post.find({ userId: userId }).populate("userId", "username");
+    const posts = await Post.find({ userId }).populate("userId", "username");
+    console.log("📦 Posts encontrados:", posts.length);
 
-    res.status(200).json({posts})
-  } catch {
-    console.error(error);
+    const media = await Media.find({ postId: { $in: posts.map(p => p._id) } });
+    console.log("📸 Media encontrados:", media.length);
 
+    const newPosts = posts.map((post) => {
+      const postMedia = media.filter((m) => post._id.toString() === m.postId.toString());
+      return {
+        post,
+        media: postMedia,
+      };
+    });
+
+    res.status(200).json({ posts: newPosts });
+  } catch (error) {
+    console.error("❌ Error en postsGetByUser:", error);
     res.status(500).json({
       msg: "Error, por favor intente en unos minutos.",
     });

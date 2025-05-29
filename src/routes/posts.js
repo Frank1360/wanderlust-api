@@ -20,6 +20,4 @@ router.get("/userPost", [jwtValidation, fieldsValidator], postsGetByUser);
 
 router.get("/", [jwtValidation, fieldsValidator], postsGet);
 
-router.get("/by-user-id", [jwtValidation], postsGetByUserId);
-
 module.exports = router;
