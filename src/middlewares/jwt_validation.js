@@ -5,8 +5,6 @@ const User = require("../models/user");
 const jwtValidation = async (req = request, res = response, next) => {
   const token = req.header("wanderlust_token");
 
-  console.log(token)
-
   if (!token) {
     return res.status(401).json({ msg: "La petición no posee token." });
   }
@@ -25,7 +23,6 @@ const jwtValidation = async (req = request, res = response, next) => {
     next();
   } catch (error) {
     res.status(500).json({
-      error,
       msg: "Error, por favor intente en unos minutos.",
     });
   }

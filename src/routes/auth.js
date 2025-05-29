@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 const fieldsValidator = require("../middlewares/fields");
-const { register, login } = require("../controllers/auth");
+const { register, login, restorePassword } = require("../controllers/auth");
 
 const router = Router();
 
@@ -46,6 +46,15 @@ router.post(
     fieldsValidator,
   ],
   login
+);
+
+router.post(
+  "/restorePassword",
+  [
+    check("email", "El correo es obligatorio.").notEmpty(),
+    fieldsValidator,
+  ],
+  restorePassword
 );
 
 module.exports = router;
